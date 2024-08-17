@@ -7,12 +7,12 @@
       </RouterLink>
       <div class="items space-x-4 kanit-thin">
         <RouterLink
-          class="item hover:border-b-2 py-[42px] px-5"
+          class="item hover:border-b-2 py-[38px] px-5"
           v-for="item in navItems"
           :to="item.path"
           :key="item.index"
         >
-          {{ item.name }} 
+          {{ item.name }}
         </RouterLink>
       </div>
       
@@ -22,8 +22,9 @@
       <RouterLink to="/contact" class="">
         <img src="/src/assets/icons/message.svg" class="h-10" alt="Aktiv-fits">
       </RouterLink>
-      <RouterLink to="/cart" class="">
+      <RouterLink to="/cart" class="relative">
         <img src="/src/assets/icons/cart.svg" class="h-10" alt="Aktiv-fits">
+        <span v-if="cartItems.length !== 0" class="absolute -top-0 -right-2 bg-red-700 kanit-medium rounded-full px-2 text-slate-100">{{cartItems.length}}</span>
       </RouterLink>
       <button v-if="!currentUser" @click="signInWithGoogle"
         class="flex gap-2 items-center rounded-md py-1.5 px-4 border-[1px] hover:bg-zinc-600 hover:text-white transition-all duration-300"
@@ -56,8 +57,10 @@
       <RouterLink to="/contact" class="">
         <img src="/src/assets/icons/message.svg" class="h-8" alt="Aktiv-fits">
       </RouterLink>
-      <RouterLink class="mx-2" to="/cart">
+      <RouterLink class="mx-2 relative" to="/cart">
         <img src="/src/assets/icons/cart.svg" alt="Aktiv-Fits" class="h-9" />
+        <span v-if="cartItems.length !== 0" class="absolute -top-0 -right-2 bg-red-700 kanit-medium rounded-full px-2 text-slate-100">{{cartItems.length}}</span>
+
       </RouterLink>
       <button @click="toggleMenu" class="p-2">
         <svg v-if="!show" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -106,7 +109,8 @@
 
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { useCartStore } from '@/store/cart.js';
+import { ref, computed, onMounted, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import Button from '../button/Button.vue';
 import { auth, provider } from '@/firebase/firebase.js';
@@ -117,6 +121,13 @@ import { useRouter } from 'vue-router';
 
 
 const router = useRouter();
+const cartStore = useCartStore();
+
+watch(cartStore.getCartItems, (newCartItems) => {
+  cartItems.value = newCartItems;
+});
+
+const cartItems = ref(cartStore.getCartItems());
 
 const navItems = ref([
   { name: 'Shirts', path: '/shop' },
@@ -129,6 +140,8 @@ const navItems = ref([
 const show = ref(false);
 const currentUser = ref(null);
 const dropdownVisible = ref(false);
+
+
 
 const toggleMenu = () => {
   show.value = !show.value;
