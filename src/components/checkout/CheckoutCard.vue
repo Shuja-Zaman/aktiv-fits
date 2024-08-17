@@ -229,6 +229,7 @@ const submitOrder = async () => {
         phoneNumber: phoneNumber.value,
         paymentMethod: paymentMethod.value,
         totalAmount: totalAmountWithShipping.value,
+        status:'pending',
         timestamp: new Date(), // Optional: add a timestamp
         items: cartItems.value.map(item => ({
           id: item.id,
@@ -236,7 +237,7 @@ const submitOrder = async () => {
           size: item.size,
           price: item.price,
           quantity: item.quantity,
-          imageUrl: item.imgUrl // Include image URL if available
+          // imageUrl: item.imgUrl // Include image URL if available
         }))
       };
 
@@ -250,8 +251,6 @@ const submitOrder = async () => {
         order_summary: cartItems.value.map(item => `${item.name} (${item.size}) x ${item.quantity}`).join(', '),
         total_amount: totalAmountWithShipping.value,
       };
-
-      console.log(import.meta.env.VITE_SERVICE_ID,import.meta.env.VITE_TEMPLATE_ID, templateParams, import.meta.env.VITE_PUBLIC_KEY)
 
       // Send an email
       await emailjs.send(import.meta.env.VITE_SERVICE_ID, import.meta.env.VITE_TEMPLATE_ID, templateParams, import.meta.env.VITE_PUBLIC_KEY);

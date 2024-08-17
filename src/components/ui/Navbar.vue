@@ -3,11 +3,11 @@
     <!-- Display screen -->
     <div class="left-0 hidden md:flex items-center gap-14">
       <RouterLink to="/" class="">
-        <img src="/src/assets/logo/brand.png" class="h-10" alt="Aktiv-fits">
+        <img src="/src/assets/logo/brand.png" class="h-10" alt="aktiv fits">
       </RouterLink>
       <div class="items space-x-4 kanit-thin">
         <RouterLink
-          class="item hover:border-b-2 py-[38px] px-5"
+          class="item hover:border-b-2 py-[42px] px-5"
           v-for="item in navItems"
           :to="item.path"
           :key="item.index"
@@ -18,7 +18,10 @@
       
     </div>
 
-    <div class="hidden md:flex gap-2 right space-x-2">
+    <div class="hidden md:flex gap-2 right space-x-2 items-center">
+      <RouterLink to="/contact" class="">
+        <img src="/src/assets/icons/message.svg" class="h-10" alt="Aktiv-fits">
+      </RouterLink>
       <RouterLink to="/cart" class="">
         <img src="/src/assets/icons/cart.svg" class="h-10" alt="Aktiv-fits">
       </RouterLink>
@@ -29,12 +32,15 @@
         Sign in 
       </button>
       <div v-else class="relative">
-        <button @click="toggleDropdown" class="rounded-full bg-gray-200 text-black p-2">
+        <button @click="toggleDropdown" class="text-white uppercase text-md text-black py-3 bg-blue-500 rounded-full px-4">
           {{ userInitials }}
         </button>
-        <div v-if="dropdownVisible" class="bg-zinc-100 hover:bg-zinc-200 absolute right-0 mt-2 py-2 rounded-md shadow-xl z-20">
-          <button @click="signOut" class="block w-full text-md text-left kanit-thin px-7 py-2 ">
-            Logout
+        <div v-if="dropdownVisible" class="kanit-medium bg-zinc-700  absolute right-0 mt-2 py-2 rounded-md shadow-xl z-20">
+          <RouterLink @click="toggleDropdown" to="/user/account" class="dropdown-item text-slate-100 hover:text-slate-300 px-4 py-2 rounded-md flex items-center">
+            <span>Account</span>
+          </RouterLink>
+          <button @click="signOut" class="dropdown-item text-red-500 hover:text-red-600 px-4 py-2 rounded-md flex items-center">
+            <span>Logout</span>
           </button>
         </div>
       </div>
@@ -42,19 +48,22 @@
 
     <!-- Mobile screen -->
     <div class="block md:hidden">
-      <RouterLink to="/" @click="toggleMenu">
+      <RouterLink to="/" @click="show = false">
         <img src="/src/assets/logo/brand.png" class="h-12" alt="Aktiv-fits">
       </RouterLink>
     </div>
     <div class="flex md:hidden items-center">
+      <RouterLink to="/contact" class="">
+        <img src="/src/assets/icons/message.svg" class="h-8" alt="Aktiv-fits">
+      </RouterLink>
       <RouterLink class="mx-2" to="/cart">
-        <img src="/src/assets/icons/cart.svg" alt="Aktiv-Fits" class="h-8" />
+        <img src="/src/assets/icons/cart.svg" alt="Aktiv-Fits" class="h-9" />
       </RouterLink>
       <button @click="toggleMenu" class="p-2">
-        <svg v-if="!show" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg v-if="!show" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
         </svg>
-        <svg v-if="show" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg v-if="show" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
@@ -63,7 +72,7 @@
     <transition name="slide-left">
     <div
       v-if="show"
-      class="border-t-[1px] border-zinc-300 kanit-medium left-0 top-24 bg-transparent backdrop-blur-[20px] w-full dropdown absolute h-screen p-3 z-50 space-y-3">
+      class="border-t-[1px] border-zinc-300 kanit-medium left-0 top-24 bg-slate-100 w-full dropdown absolute h-screen p-3 z-50 space-y-3">
       <RouterLink
         class="bg-transparent item text-xl"
         @click="toggleMenu"
@@ -73,7 +82,8 @@
       >
         {{ item.name }}
         <hr class="my-4 border-t-[1px] bg-white border-zinc-400"/>
-      </RouterLink>
+      </RouterLink> 
+      
 
       <!-- Display user info or sign-in button on mobile -->
       <button v-if="!currentUser" @click="signInWithGoogle"
@@ -82,7 +92,9 @@
         Sign in 
       </button>
       <div v-else class="flex flex-col items-center">
-        <p class="text-lg mb-2 kanit-thin">{{ currentUser.displayName }}</p>
+        <RouterLink to="/user/account" @click="toggleMenu" class="bg-blue-500 text-white w-full my-2 px-4 py-2 rounded-md text-center">
+          Account
+        </RouterLink>
         <button @click="signOut" class="w-full py-2 px-4 bg-red-500 text-white rounded">
           Logout
         </button>
@@ -101,6 +113,10 @@ import { auth, provider } from '@/firebase/firebase.js';
 import { signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase.js';
+import { useRouter } from 'vue-router';
+
+
+const router = useRouter();
 
 const navItems = ref([
   { name: 'Shirts', path: '/shop' },
@@ -162,6 +178,8 @@ const signOut = async () => {
     dropdownVisible.value = false;
     localStorage.removeItem('loginTime');
     localStorage.removeItem('email');
+    router.push('/');
+    show.value = false;
   } catch (error) {
     console.error('Error during sign out:', error);
   }

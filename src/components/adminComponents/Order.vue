@@ -33,6 +33,15 @@
             </li>
           </ul>
         </div>
+        <!-- Status Dropdown -->
+        <div class="status-container mt-3">
+          <select v-model="order.status" @change="updateStatus(order.id, order.status)" class="status-select bg-gray-200 rounded p-2">
+            <option value="pending">Pending</option>
+            <option value="on the way">On the Way</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
         <!-- Delete Button -->
         <button @click="deleteOrder(order.id)" class="delete-button bg-red-500 text-white py-2 px-4 rounded mt-3">Delete Order</button>
       </div>
@@ -42,7 +51,7 @@
 
 
 <script setup>
-import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase.js';
 import { ref, onMounted } from 'vue';
 
@@ -70,6 +79,15 @@ const deleteOrder = async (orderId) => {
   }
 };
 
+const updateStatus = async (orderId, status) => {
+  try {
+    await updateDoc(doc(db, 'orders', orderId), { status });
+    console.log(`Order ${orderId} status updated to ${status}`);
+  } catch (err) {
+    error.value = 'Failed to update the order status: ' + err.message;
+  }
+};
+
 const formatDate = (timestamp) => {
   const date = new Date(timestamp.toDate()); // Convert Firestore timestamp to JavaScript Date object
   return date.toLocaleString(); // Format date and time
@@ -77,9 +95,17 @@ const formatDate = (timestamp) => {
 
 onMounted(fetchOrders);
 </script>
-
-
 <style scoped>
+.orders-container {
+  max-height: 100vh; /* Set the maximum height to the viewport height */
+  overflow-y: auto;  /* Enable vertical scrolling when content overflows */
+  padding: 16px;     /* Optional padding */
+}
+
+.orders-list {
+  margin-top: 10px;
+}
+
 .items-list {
   margin-top: 10px;
 }
@@ -93,5 +119,13 @@ onMounted(fetchOrders);
   font-size: 1rem;
   color: #555;
   margin-bottom: 5px;
+}
+
+.status-container {
+  margin-top: 10px;
+}
+
+.status-select {
+  width: 100%;
 }
 </style>

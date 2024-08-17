@@ -9,32 +9,55 @@ const router = createRouter({
     {
       path: '/',
       name: 'Home',
-      component: () => import('../views/HomeView.vue')
+      component: () => import('../views/HomeView.vue'),
+      meta:{title:'Aktiv Fits'}
     },
     {
       path:'/contact',
-      name:'Contact',
-      component: ()=> import('../views/ContactView.vue')
+      name:'Contact Us',
+      component: ()=> import('../views/ContactView.vue'),
+      meta:{title:'Contact - Aktiv Fits'}
+    },
+    {
+      path:'/about',
+      name:'About Us',
+      component: ()=> import('../views/AboutView.vue'),
+      meta:{title:'About - Aktiv Fits'}
+    },
+    {
+      path:'/policy',
+      name:'Privacy policy',
+      component: ()=> import('../views/PolicyView.vue'),
+      meta:{title:'Privacy policy - Aktiv Fits'}
     },
     {
       path:'/shop',
       name:'Shop',
-      component:ShopView
+      component:()=>import('../views/ShopView.vue'),
+      meta:{title:'Shop - Aktiv Fits'}
     },
     {
       path:'/product/:id',
       name:'Product',
-      component:ProductView
+      component:()=>import('../views/ProductView.vue'),
+      meta:{title:'Product - Aktiv Fits'}
     },
     {
       path:'/cart',
       name:'Cart',
-      component:()=> import('../views/CartView.vue')
+      component:()=> import('../views/CartView.vue'),
+      meta:{title:'Cart - Aktiv Fits'}
     },
     {
       path:'/thank-you',
       name:'Thank You',
-      component: ()=>import('../views/ThankView.vue')
+      component: ()=>import('../views/ThankView.vue'),
+    },
+    {
+      path:'/user/account',
+      name:'Account',
+      component: ()=>import('../views/AccountView.vue'),
+      meta:{title:'User Account'}
     },
     {
       path:'/user/admin',
@@ -49,8 +72,15 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(() => {
+router.beforeEach((to, from, next) => {
   NProgress.start(); // Start the progress bar on route change
+  if(to.meta.title){
+    document.title = to.meta.title;
+  }
+  else{
+    document.title = 'Aktiv Fits';
+  }
+  next();
 });
 
 router.afterEach(() => {

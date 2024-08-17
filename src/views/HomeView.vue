@@ -96,6 +96,7 @@ import Button from '@/components/button/Button.vue';
 import { RouterLink } from 'vue-router';
 import ProductCard from '../components/product/productCard.vue';
 
+
 const loading = ref(true);
 const error = ref(null);
 const products = ref([]);
@@ -115,7 +116,11 @@ const fetchProducts = async () => {
   }
 };
 
-onMounted(fetchProducts);
+onMounted(()=>{
+  fetchProducts();
+});
+
+
 </script>
 
 <style scoped>
