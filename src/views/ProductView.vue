@@ -39,7 +39,6 @@
             type="number"
             v-model="quantity"
             min="1"
-            @input="validateQuantity"
             class="border border-zinc-300 rounded-md p-2 md:w-20 sm:w-10 focus:outline-none focus:border-zinc-600"
           />
         </div>
@@ -72,15 +71,26 @@ const cartStore = useCartStore();
 const message = ref('');
 
 const validateQuantity = () => {
-  if (quantity.value < 1) {
-    quantity.value = 1;
-  }else if (quantity.value > 10) {
-    quantity.value = 10;
-    message.value = 'Maximum quantity is 10';
-  } else {
-    message.value = ''; // Clear message if quantity is valid
+  const value = quantity.value;
+
+  // Check if the value is empty or not a number
+  if (isNaN(value) || value === '') {
+    message.value = 'Please enter a valid number.';
+    return false;
   }
+
+  // Ensure the value is between 1 and 10 (inclusive)
+  if (value < 1 || value > 10) {
+    message.value = 'Quantity must be between 1 and 10.';
+    return false;
+  }
+
+  // Clear the message if the value is valid
+  message.value = '';
+  return true;
 };
+
+
 
 // Computed property to derive the size array from product.size
 const sizeArray = computed(() => product.value?.size ? product.value.size.split(',').map(s => s.trim()) : []);
@@ -113,19 +123,21 @@ const addToCart = () => {
 
   message.value = '';
 
-  const productToAdd = {
-    id: productId,
-    imgUrl:product.value.imageUrl,
-    name: product.value.name,
-    price: product.value.price,
-    size: selectedSize.value,
-    quantity: quantity.value,
-  };
+  if (validateQuantity()) {
+    const productToAdd = {
+      id: productId,
+      imgUrl: product.value.imageUrl,
+      name: product.value.name,
+      price: product.value.price,
+      size: selectedSize.value,
+      quantity: quantity.value,
+    };
+
 
   cartStore.addProduct(productToAdd);
 
   alert("Prodcut added to Cart.")
-
+  }
 };
 
 // Fetch product details when component is mounted
