@@ -39,6 +39,7 @@
             type="number"
             v-model="quantity"
             min="1"
+            @input="validateQuantity"
             class="border border-zinc-300 rounded-md p-2 md:w-20 sm:w-10 focus:outline-none focus:border-zinc-600"
           />
         </div>
@@ -69,6 +70,17 @@ const selectedSize = ref(''); // To hold the selected size
 const cartStore = useCartStore();
 
 const message = ref('');
+
+const validateQuantity = () => {
+  if (quantity.value < 1) {
+    quantity.value = 1;
+  }else if (quantity.value > 10) {
+    quantity.value = 10;
+    message.value = 'Maximum quantity is 10';
+  } else {
+    message.value = ''; // Clear message if quantity is valid
+  }
+};
 
 // Computed property to derive the size array from product.size
 const sizeArray = computed(() => product.value?.size ? product.value.size.split(',').map(s => s.trim()) : []);
