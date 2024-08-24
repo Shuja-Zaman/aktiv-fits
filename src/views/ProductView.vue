@@ -8,8 +8,8 @@
     <!-- Product Content -->
     <div v-if="!loading && product" class="container mx-auto bg-white shadow-md rounded-lg overflow-hidden flex flex-col lg:flex-row">
       <!-- Product Image -->
-      <div class="w-full lg:w-[25%] p-4">
-        <img :src="product.imageUrl" :alt="product.name" class="w-full h-[18rem] object-cover rounded-lg" />
+      <div class="w-full lg:w-[25%] p-4 ">
+        <img :src="product.imageUrl" :alt="product.name"  class=" border-zinc-300 border-[1px] w-full img rounded-lg" />
       </div>
       
       <!-- Product Details -->
@@ -148,4 +148,10 @@ onMounted(() => {
 
 <style scoped>
 /* Scoped styles are omitted since we're using Tailwind CSS classes directly */
+
+.img{
+  background-size: cover;
+  object-fit: contain;
+}
+
 </style>

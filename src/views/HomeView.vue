@@ -1,13 +1,13 @@
 <template>
   <div class="kanit-thin">
     <!-- main section -->
-    <div class="h-[70vh] md:h-[85vh] flex items-center main p-7">
+    <div class="h-[70vh] md:h-[85vh] flex items-center main p-7 main-img">
       <div class="w-full">
         <h1 class=" text-4xl md:text-5xl lg:text-6xl kanit-extrabold lg:text-left text-center bg-clip-text text-transparent bg-gradient-to-br from-lime-400 to-lime-800">Empower Your <br/> Every Move
           <span class="text-zinc-600 italic font-light text-xl block mt-2 md:mt-4">with aktiv-fits</span>
         </h1>
         <RouterLink to="/shop" class="text-center block lg:inline">
-          <Button name="Shop now" class=" w-max my-4 md:my-5 w-full md:w-max text-lg md:text-xl" />
+          <Button name="Shop now" class=" w-max my-4 md:my-5 md:w-max text-lg md:text-xl" />
         </RouterLink>
       </div>
     </div>
@@ -25,9 +25,7 @@
 <div class="my-[5rem] md:my-[10rem] h-auto md:h-[60vh] flex flex-col md:flex-row justify-center items-center gap-8 md:gap-14">
   <!-- image section -->
   <div class="relative">
-    <img class="shadow-xl shadow-zinc-600 w-full" src="https://radstore.pk/cdn/shop/files/DSC08683_280x.jpg?v=1723276098" alt="">
-    <img class=" md:absolute md:shadow-xl md:shadow-zinc-500 md:right-48 md:bottom-28 md:w-auto w-[120px] absolute bottom-10 right-0 -z-10" src="https://radstore.pk/cdn/shop/files/DSC08715_180x.jpg?v=1723275962" alt="">
-    <img class=" md:absolute md:shadow-xl md:shadow-zinc-500 md:right-52 md:-bottom-10 md:w-auto w-[80px] absolute bottom-0 right-2 -z-10" src="https://radstore.pk/cdn/shop/files/DSC08677_100x.jpg?v=1723275474" alt="">
+    <img class=" h-[20rem] shadow-xl shadow-zinc-600 w-full" src="../assets/images/show.jpg" alt="">
   </div>
   <!-- text section -->
   <div class="text-center md:text-left">
@@ -60,7 +58,7 @@
         />
       </div>
       <RouterLink class="text-center block" to="/shop">
-        <Button name="View All" class="w-max my-[3rem] md:my-[4rem] text-lg md:text-xl w-full md:w-max mx-auto" />
+        <Button name="View All" class="w-max my-[3rem] md:my-[4rem] text-lg md:text-xl md:w-max mx-auto" />
       </RouterLink>
     </div>
 
@@ -68,7 +66,7 @@
     <div class="my-[5rem] md:my-[10rem] flex flex-col md:flex-row justify-center items-center gap-8 md:gap-14">
       <!-- image section -->
       <div class="relative w-full md:w-1/2">
-        <img class=" shadow-2xl shadow-zinc-600 h-auto w-full " src="https://radstore.pk/cdn/shop/files/File0702_square_d9d6de80-9230-4ff1-ba12-5761f2a716c0_750x.jpg?v=1613737436" alt="">
+        <img class="h-[28rem] shadow-2xl shadow-zinc-600 object-cover object-center w-full " src="../assets/images/blueTrouser.jpg" alt="">
       </div>
       <!-- text section -->
       <div class="text-center md:text-left p-7">
@@ -80,7 +78,7 @@
           In a sea of online stores, what truly distinguishes Aktiv is our commitment to you. We believe that lasting relationships are built on trust, quality, and care. That’s why we pour our passion into every detail, ensuring that our products speak for themselves and that you always feel valued.
         </p>
         <RouterLink to="/shop">
-          <Button name="Shop Now" class="my-4 md:my-5 text-lg md:text-xl w-full w-max" />
+          <Button name="Shop Now" class="my-4 md:my-5 text-lg md:text-xl  w-max" />
         </RouterLink>
       </div>
     </div>
@@ -124,4 +122,11 @@ onMounted(()=>{
 </script>
 
 <style scoped>
+.main-img{
+  background-image: url('../assets/images/bg.jpg');
+  background-size: cover;
+  
+}
+
 </style>
+

@@ -1,7 +1,7 @@
 <template>
     <RouterLink :to="`/product/${props.id}`" class="bg-white block border border-gray-200 rounded-lg overflow-hidden shadow-md">
       <div class="relative overflow-hidden">
-        <img :src="props.image" :alt="props.name" class="hover:scale-105 transition-all duration-300 w-full h-[17rem] object-cover" />
+        <img :src="props.image" :alt="props.name" class=" h-[20rem] hover:scale-105 transition-all duration-300 w-full  object-cover bg-cover" />
       </div>
       <div class="p-4 flex flex-col justify-around h-48">
         <div>

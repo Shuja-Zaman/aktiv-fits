@@ -33,7 +33,7 @@
         Sign in 
       </button>
       <div v-else class="relative">
-        <button @click="toggleDropdown" class="text-white uppercase text-md text-black py-3 bg-blue-500 rounded-full px-4">
+        <button @click="toggleDropdown" class="text-white uppercase text-md py-2 bg-zinc-800 rounded-full px-4">
           {{ userInitials }}
         </button>
         <div v-if="dropdownVisible" class="kanit-medium bg-zinc-700  absolute right-0 mt-2 py-2 rounded-md shadow-xl z-20">

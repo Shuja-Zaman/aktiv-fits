@@ -11,7 +11,7 @@
           </div>
   
           <!-- Navigation Links -->
-          <div class="flex flex-col sm:items-start md:items-center md:items-start">
+          <div class="flex flex-col sm:items-start md:items-center ">
             <ul class="space-y-2">
               <li>
                 <RouterLink to="/shop" class="hover:text-gray-300">Shop</RouterLink>
@@ -38,11 +38,9 @@
               Phone/Whatsapp <a href="tel:+03390252521" class="hover:text-gray-300">+03390252521</a>
             </p>
             <div class="flex space-x-4 mt-4 items-center">
-              <a href="https://instagram.com" target="_blank" class="text-gray-400 hover:text-gray-300">
+              <span class="text-gray-400">Follow Us on</span>
+              <a href="https://www.instagram.com/aktiv.pk/" target="_blank" class="text-gray-400 hover:text-gray-300">
                 <img src="/src/assets/icons/instagram.svg" class="h-6 w-6" alt="">
-              </a>
-              <a href="https://linkedin.com" target="_blank" class="text-gray-400 hover:text-gray-300">
-                <img src="/src/assets/icons/linkedin.svg" class="h-7 w-7" alt="">
               </a>
               <!-- Add more social media icons as needed -->
             </div>
