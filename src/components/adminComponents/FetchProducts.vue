@@ -6,9 +6,9 @@
       <div v-if="products.length === 0 && !loading" class="text-gray-500">No products available.</div>
       <div v-if="products.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div v-for="product in products" :key="product.id" class="bg-white border border-gray-200 rounded-lg p-4 shadow-md">
-          <img :src="product.imageUrl" :alt="product.name" class="w-full h-48 object-cover mb-4" />
+          <img :src="product.imageUrls[0]" :alt="product.name" class="w-full h-48 object-cover mb-4" />
           <h3 class="text-lg font-bold">{{ product.name }}</h3>
-          <p>{{ product.description }}</p>
+          <p class="">{{ product.description }}</p>
           <p>{{ product.size }}</p>
           <p class="font-semibold">Rs. {{ product.price }}</p>
           <button 

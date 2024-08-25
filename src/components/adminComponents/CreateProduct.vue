@@ -54,16 +54,18 @@
         </div>
   
         <!-- Product Image -->
-        <div class="space-y-2">
-          <label for="image" class="block text-md kanit-medium text-gray-700">Product Image</label>
-          <input
-            @change="handleImageUpload"
-            id="image"
-            type="file"
-            class="block kanit-thin w-full px-3 py-2 border border-zinc-400 rounded-md shadow-sm focus:border-zinc-600 focus:outline-none"
-            accept="image/*"
-          />
-        </div>
+      <div class="space-y-2">
+        <label for="image" class="block text-md kanit-medium text-gray-700">Product Images</label>
+        <input
+          @change="handleImageUpload"
+          id="image"
+          type="file"
+          class="block kanit-thin w-full px-3 py-2 border border-zinc-400 rounded-md shadow-sm focus:border-zinc-600 focus:outline-none"
+          accept="image/*"
+          multiple
+        />
+      </div>
+
   
         <!-- Category Selection -->
         <div class="space-y-2">
@@ -122,60 +124,65 @@
       error.value = 'Failed to fetch categories';
     }
   };
+
   
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      imageFile.value = file;
-    }
-  };
-  
-  const uploadImage = async () => {
-    if (imageFile.value) {
-      const storage = getStorage();
-      const imageRef = storageRef(storage, `images/${imageFile.value.name}`);
-      const snapshot = await uploadBytes(imageRef, imageFile.value);
-      imageUrl.value = await getDownloadURL(snapshot.ref);
-    }
-  };
-  
-  const addProduct = async () => {
-    if (!name.value.trim() || !description.value.trim() || !selectedCategory.value) {
-      error.value = 'All fields are required';
-      return;
-    }
-  
-    loading.value = true;
-    error.value = '';
-    success.value = false;
-  
-    try {
-      // Upload the image and get the URL
-      await uploadImage();
-  
-      await addDoc(collection(db, 'products'), {
-        name: name.value.trim(),
-        description: description.value.trim(),
-        price: Number(price.value),
-        size: size.value.trim(),
-        categoryId: selectedCategory.value,
-        imageUrl: imageUrl.value, // Store the image URL in Firestore
-      });
-  
-      success.value = true;
-      name.value = '';
-      description.value = '';
-      price.value = 0;
-      size.value = '';
-      selectedCategory.value = '';
-      imageFile.value = null;
-      imageUrl.value = '';
-    } catch (err) {
-      error.value = err.message;
-    } finally {
-      loading.value = false;
-    }
-  };
+  const imageFiles = ref([]);
+
+const handleImageUpload = (event) => {
+  imageFiles.value = Array.from(event.target.files);
+};
+
+const uploadImages = async () => {
+  const storage = getStorage();
+  const uploadedImageUrls = [];
+
+  for (const file of imageFiles.value) {
+    const imageRef = storageRef(storage, `images/${file.name}`);
+    const snapshot = await uploadBytes(imageRef, file);
+    const downloadUrl = await getDownloadURL(snapshot.ref);
+    uploadedImageUrls.push(downloadUrl);
+  }
+
+  return uploadedImageUrls;
+};
+
+const addProduct = async () => {
+  if (!name.value.trim() || !description.value.trim() || !selectedCategory.value) {
+    error.value = 'All fields are required';
+    return;
+  }
+
+  loading.value = true;
+  error.value = '';
+  success.value = false;
+
+  try {
+    // Upload the images and get the URLs
+    const imageUrls = await uploadImages();
+
+    await addDoc(collection(db, 'products'), {
+      name: name.value.trim(),
+      description: description.value.trim(),
+      price: Number(price.value),
+      size: size.value.trim(),
+      categoryId: selectedCategory.value,
+      imageUrls, // Store the array of image URLs in Firestore
+    });
+
+    success.value = true;
+    name.value = '';
+    description.value = '';
+    price.value = 0;
+    size.value = '';
+    selectedCategory.value = '';
+    imageFiles.value = [];
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
+  }
+};
+
   
   onMounted(() => {
     fetchCategories();

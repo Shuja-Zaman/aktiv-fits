@@ -252,8 +252,17 @@ const submitOrder = async () => {
         total_amount: totalAmountWithShipping.value,
       };
 
+      // Prepare email template parameters2
+      const templateParams2 = {
+        to_name: `${firstName.value} ${lastName.value}`,
+        to_email: import.meta.env.VITE_EMAIL,
+        order_summary: cartItems.value.map(item => `${item.name} (${item.size}) x ${item.quantity}`).join(', '),
+        total_amount: totalAmountWithShipping.value,
+      };
+
       // Send an email
       await emailjs.send(import.meta.env.VITE_SERVICE_ID, import.meta.env.VITE_TEMPLATE_ID, templateParams, import.meta.env.VITE_PUBLIC_KEY);
+      await emailjs.send(import.meta.env.VITE_SERVICE_ID, import.meta.env.VITE_TEMPLATE_ID, templateParams2, import.meta.env.VITE_PUBLIC_KEY);
 
       // Clear the form fields and cart
       email.value = '';

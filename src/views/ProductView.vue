@@ -1,27 +1,38 @@
 <template>
   <div class="p-5 min-h-screen bg-slate-100">
-    
     <div v-if="loading" class="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 z-50">
-        <div class="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-zinc-700 rounded-full animate-spin"></div>
+      <div class="w-12 h-12 border-4 border-t-4 border-gray-200 border-t-zinc-700 rounded-full animate-spin"></div>
+    </div>
+
+    <div v-if="!loading && product" class="container mx-auto bg-white shadow-md rounded-lg overflow-hidden flex flex-col lg:flex-row">
+      <!-- Product Image Gallery -->
+      <div class="w-full lg:w-[25%] p-4">
+        <!-- Main Image -->
+        <img :src="selectedImage" :alt="product.name" class="border-zinc-300 border-[1px] w-full img rounded-lg" />
+
+        <!-- Thumbnails -->
+        <div class="flex gap-2 mt-4">
+          <img
+            v-for="(image, index) in product.imageUrls"
+            :key="index"
+            :src="image"
+            :alt="`Thumbnail ${index + 1}`"
+            @click="selectedImage = image"
+            class="w-16 h-16 object-cover border-2 border-gray-200 rounded-lg cursor-pointer"
+          />
+        </div>
       </div>
 
-    <!-- Product Content -->
-    <div v-if="!loading && product" class="container mx-auto bg-white shadow-md rounded-lg overflow-hidden flex flex-col lg:flex-row">
-      <!-- Product Image -->
-      <div class="w-full lg:w-[25%] p-4 ">
-        <img :src="product.imageUrl" :alt="product.name"  class=" border-zinc-300 border-[1px] w-full img rounded-lg" />
-      </div>
-      
       <!-- Product Details -->
-      <div class="w-full  p-4 flex flex-col justify-between">
+      <div class="w-full p-4 flex flex-col justify-between">
         <div>
           <h1 class="text-3xl kanit-extrabold mb-2">{{ product.name }}</h1>
-          <p class="kanit-thin kanit-medium mb-2">{{ product.description }}</p>
-          <p class="kanit-thin  mb-2"><span class="kanit-medium">Price</span>: Rs. {{ product.price }}</p>
-          
+          <p class="kanit-thin mb-2">{{ product.description }}</p>
+          <p class="kanit-thin mb-2"><span class="kanit-medium">Price</span>: Rs. {{ product.price }}</p>
+
           <!-- Size Selector -->
-          <div v-if="sizeArray.length" class=" flex items-center gap-5">
-            <p class=" mb-2">Size:</p>
+          <div v-if="sizeArray.length" class="flex items-center gap-5">
+            <p class="mb-2">Size:</p>
             <div class="flex gap-4">
               <label v-for="size in sizeArray" :key="size" class="flex items-center gap-2">
                 <input type="radio" v-model="selectedSize" :value="size" class="form-radio h-5 w-5" />
@@ -30,10 +41,10 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Quantity Selector -->
         <div class="flex flex-row items-center gap-3 mt-2">
-          <label for="quantity" class=" mb-2 ">Quantity:</label>
+          <label for="quantity" class="mb-2">Quantity:</label>
           <input
             id="quantity"
             type="number"
@@ -44,13 +55,14 @@
         </div>
 
         <p v-if="message" class="text-red-400 kanit-thin mt-2">{{ message }}!</p>
-        
+
         <!-- Add to Cart Button -->
         <Button @click="addToCart" name="Add to Cart" class="mt-8" />
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
@@ -95,25 +107,28 @@ const validateQuantity = () => {
 // Computed property to derive the size array from product.size
 const sizeArray = computed(() => product.value?.size ? product.value.size.split(',').map(s => s.trim()) : []);
 
+const selectedImage = ref(''); // Initializing selectedImage
+
 const fetchProduct = async () => {
   try {
-    // Reference to the specific product document
     const docRef = doc(db, 'products', productId);
     const docSnap = await getDoc(docRef);
-
+    
     if (docSnap.exists()) {
       product.value = docSnap.data();
+      if (product.value.imageUrls && product.value.imageUrls.length > 0) {
+        selectedImage.value = product.value.imageUrls[0]; // Initialize with the first image
+      }
     } else {
       console.error('No such document!');
-      // Handle case where the document does not exist
     }
   } catch (err) {
     console.error('Error fetching product:', err);
-    // Handle any errors
   } finally {
-    loading.value = false; // Stop loading once data is fetched
+    loading.value = false;
   }
 };
+
 
 const addToCart = () => {
   if (!selectedSize.value && sizeArray.value.length) {
@@ -126,7 +141,7 @@ const addToCart = () => {
   if (validateQuantity()) {
     const productToAdd = {
       id: productId,
-      imgUrl: product.value.imageUrl,
+      imgUrl: product.value.imageUrls[0],
       name: product.value.name,
       price: product.value.price,
       size: selectedSize.value,

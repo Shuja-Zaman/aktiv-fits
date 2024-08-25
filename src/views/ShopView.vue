@@ -30,7 +30,7 @@
         v-for="product in filteredProducts"
         :key="product.id"
         :id="product.id"
-        :image="product.imageUrl"
+        :image="product.imageUrls || []"
         :name="product.name"
         :price="product.price"
         :size="product.size"
