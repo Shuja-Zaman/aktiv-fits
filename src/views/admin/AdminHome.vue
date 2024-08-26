@@ -32,7 +32,7 @@ const router = useRouter();
 
 const checkAuth = () => {
   const email = localStorage.getItem('email'); // Use 'email' as the key
-  if (email !== import.meta.env.VITE_EMAIL) {
+  if (email !== import.meta.env.VITE_EMAIL_COMP) {
     router.push('/404'); // Redirect to home if the user is not authenticated
   }
 }

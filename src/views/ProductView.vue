@@ -59,7 +59,11 @@
         <!-- Add to Cart Button -->
         <Button @click="addToCart" name="Add to Cart" class="mt-8" />
       </div>
+
     </div>
+    <img v-if="category == 'KZN9CkQxyPbH35BlC6W8' " src="../assets/images/t-shirtChart.jpg" alt="Chart" class="lg:w-[75%] mx-auto my-10">
+    <img v-if="category == 'rmQ30Tb2jyyZRIFQA7ot' " src="../assets/images/oversizeShirtChart.jpg" alt="Chart" class="lg:w-[75%] mx-auto my-10">
+    <img v-if="category == 'xlclnMgVtuhLgy8gAH10' " src="../assets/images/trouserChart.jpg" alt="Chart" class="lg:w-[75%] mx-auto my-10">
   </div>
 </template>
 
@@ -79,6 +83,8 @@ const loading = ref(true); // Loading state
 const quantity = ref(1); // Initialize quantity to 1
 const selectedSize = ref(''); // To hold the selected size
 const cartStore = useCartStore();
+
+const category = ref('');
 
 const message = ref('');
 
@@ -122,6 +128,7 @@ const fetchProduct = async () => {
     } else {
       console.error('No such document!');
     }
+    category.value = product.value.categoryId.id;
   } catch (err) {
     console.error('Error fetching product:', err);
   } finally {
