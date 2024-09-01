@@ -5,7 +5,7 @@
       <RouterLink to="/" class="">
         <img src="/src/assets/logo/brand.png" class="h-10" alt="aktiv fits">
       </RouterLink>
-      <div class="items space-x-4 kanit-thin">
+      <div class="items space-x-4 kanit-thin ">
         <RouterLink
           class="item hover:border-b-2 py-[38px] px-5"
           v-for="item in navItems"
@@ -14,6 +14,10 @@
         >
           {{ item.name }}
         </RouterLink>
+      </div>
+      <div class="flex items-center justify-center gap-2">
+        <p class="text-orange-600 animate-pulse">Bundles available in shop</p>
+        <RouterLink to="/shop" class="underline"> Check Now!</RouterLink>
       </div>
       
     </div>
@@ -134,6 +138,7 @@ const navItems = ref([
   { name: 'T-Shirts', path: '/shop' },
   { name: 'Trousers', path: '/shop' },
   { name: 'Shorts', path: '/shop' },
+  { name:'Bundles', path: '/shop'}
   
 ]);
 

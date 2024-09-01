@@ -24,8 +24,22 @@
       <p>Error fetching products: {{ error }}</p>
     </div>
 
-    <!-- Product Grid -->
-    <div v-if="!loading && !error" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div class="">
+
+      <button @click="showBundles = !showBundles" class="text-slate-100  font-bold bg-gradient-to-r from-orange-400 to-orange-600 hover:to-orange-400 mx-auto block w-full my-3 p-2 rounded">Check Special Offers</button>
+      <!-- bundle -->
+      <div v-if="!loading && !error && showBundles" class="gap-4 my-3 class grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <BundleCard
+          v-for="bundle in bundles"
+          :key="bundle.id"
+          :id="bundle.id"
+          :image="bundle.image"
+          :name="bundle.name"
+          :price="bundle.price"
+        />
+    </div>
+      <!-- Product Grid -->
+      <div v-if="!loading && !error" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <ProductCard
         v-for="product in filteredProducts"
         :key="product.id"
@@ -36,6 +50,7 @@
         :size="product.size"
         :category="product.categoryName"
       />
+    </div>
     </div>
 
     <div v-if="loading" class="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50 z-50">
@@ -49,14 +64,18 @@ import { ref, computed, onMounted } from 'vue';
 import { getDocs, collection, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import ProductCard from '../components/product/productCard.vue';
+import BundleCard from '@/components/bundle/BundleCard.vue';
 
 // Define state variables
 const products = ref([]);
 const categories = ref([]);
+const bundles = ref([]);
 const loading = ref(true);
 const error = ref(null);
 const searchQuery = ref('');
 const selectedCategory = ref('');
+
+const showBundles = ref(false);
 
 // Fetch products and resolve category references
 const fetchProducts = async () => {
@@ -81,6 +100,20 @@ const fetchProducts = async () => {
     error.value = err.message || 'Failed to fetch products';
   } finally {
     loading.value = false;
+  }
+};
+
+// Fetch categories from Firestore
+const fetchBundles = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'bundles'));
+    bundles.value = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    // console.log(bundles.value)
+  } catch (err) {
+    error.value = err.message || 'Failed to fetch categories';
   }
 };
 
@@ -110,6 +143,7 @@ const filteredProducts = computed(() => {
 onMounted(() => {
   fetchProducts();
   fetchCategories();
+  fetchBundles();
 });
 </script>
 

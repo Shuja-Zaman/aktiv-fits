@@ -59,11 +59,11 @@
         <!-- Add to Cart Button -->
         <Button @click="addToCart" name="Add to Cart" class="mt-8" />
       </div>
-
+      
     </div>
     <img v-if="category == 'KZN9CkQxyPbH35BlC6W8' " src="../assets/images/t-shirt.png" alt="Chart" class="lg:w-[75%] mx-auto my-10">
-    <img v-if="category == 'rmQ30Tb2jyyZRIFQA7ot' " src="../assets/images/oversize_t-shirt.png" alt="Chart" class="lg:w-[75%] mx-auto my-10">
-    <img v-if="category == 'xlclnMgVtuhLgy8gAH10' " src="../assets/images/trouser.png" alt="Chart" class="lg:w-[75%] mx-auto my-10">
+  <img v-if="category == 'rmQ30Tb2jyyZRIFQA7ot' " src="../assets/images/oversize_t-shirt.png" alt="Chart" class="lg:w-[75%] mx-auto my-10">
+  <img v-if="category == 'xlclnMgVtuhLgy8gAH10' " src="../assets/images/trouser.png" alt="Chart" class="lg:w-[75%] mx-auto my-10">
   </div>
 </template>
 

@@ -170,6 +170,8 @@ import emailjs from '@emailjs/browser';
 const cartStore = useCartStore();
 const cartItems = ref(cartStore.getCartItems());
 
+// console.log(cartItems.value[0].products);
+
 const isLoading = ref(false);
 const router = useRouter();
 
@@ -216,6 +218,8 @@ const submitOrder = async () => {
   if (!phoneNumberError.value) {
     try {
       isLoading.value = true; // Start loading
+      
+      // console.log(cartItems.value.products)
 
       // Prepare order data
       const orderData = {
@@ -234,23 +238,33 @@ const submitOrder = async () => {
         items: cartItems.value.map(item => ({
           id: item.id,
           name: item.name,
-          size: item.size,
+          size: item.size || '',
           price: item.price,
           quantity: item.quantity,
+          products: item.products || ''
           // imageUrl: item.imgUrl // Include image URL if available
         }))
       };
+
+      // console.log(orderData)
 
       // Send order data to Firebase
       await addDoc(collection(db, "orders"), orderData);
 
       // Prepare email template parameters
-      const templateParams = {
-        to_name: `${firstName.value} ${lastName.value}`,
-        to_email: email.value,
-        order_summary: cartItems.value.map(item => `${item.name} (${item.size}) x ${item.quantity}`).join(', '),
-        total_amount: totalAmountWithShipping.value,
-      };
+const templateParams = {
+  to_name: `${firstName.value} ${lastName.value}`,
+  to_email: email.value,
+  order_summary: cartItems.value
+    .map(item => {
+      const productDetails = item.products
+        .map(product => `${product.name} (${product.selectedSize || ' '})`)
+        .join(', ');
+      return `${item.name} (${item.size || ' '}) x ${item.quantity} - ${productDetails}`;
+    })
+    .join(', '),
+  total_amount: totalAmountWithShipping.value,
+};
 
       // Prepare email template parameters2
       const templateParams2 = {

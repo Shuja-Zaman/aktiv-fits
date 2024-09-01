@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import NProgress from 'nprogress';
-import ShopView from '@/views/ShopView.vue';
-import ProductView from '@/views/ProductView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,6 +44,13 @@ const router = createRouter({
       name:'Product',
       component:()=>import('../views/ProductView.vue'),
       meta:{title:'Product - Aktiv Fits',  description: 'Discover detailed information about our premium Aktiv wear. View high-quality images, product specifications, and customer reviews before making your purchase.'
+      }
+    },
+    {
+      path:'/bundle/:id',
+      name:'Bundle',
+      component:()=>import('../views/BundleView.vue'),
+      meta:{title:'Bundles - Aktiv Fits',  description: 'Discover detailed information about our special offers. View high-quality images, product specifications, and customer reviews before making your purchase.'
       }
     },
     {

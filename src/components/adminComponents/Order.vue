@@ -30,6 +30,11 @@
           <ul>
             <li v-for="(item, index) in order.items" :key="index" class="item">
               {{ item.name }} ({{ item.quantity }} x Rs. {{ item.price }}) , {{ item.size }}
+                  <ul v-if="item.products">
+              <li v-for="(product, pIndex) in item.products" :key="pIndex">
+                { {{ product.name }} - {{ product.selectedSize }} }
+              </li>
+        </ul>
             </li>
           </ul>
         </div>
