@@ -252,26 +252,44 @@ const submitOrder = async () => {
       await addDoc(collection(db, "orders"), orderData);
 
       // Prepare email template parameters
-const templateParams = {
-  to_name: `${firstName.value} ${lastName.value}`,
-  to_email: email.value,
-  order_summary: cartItems.value
-    .map(item => {
-      const productDetails = item.products
-        .map(product => `${product.name} (${product.selectedSize || ' '})`)
-        .join(', ');
-      return `${item.name} (${item.size || ' '}) x ${item.quantity} - ${productDetails}`;
-    })
-    .join(', '),
-  total_amount: totalAmountWithShipping.value,
-};
+      const templateParams = {
+        to_name: `${firstName.value} ${lastName.value}`,
+        to_email: email.value,
+        order_summary: cartItems.value
+          .map(item => {
+            // Check if item.products exists and is an array
+            const productDetails = Array.isArray(item.products)
+              ? item.products
+                  .map(product => `${product.name} (${product.selectedSize || ' '})`)
+                  .join(', ')
+              : `${item.name} (${item.size || ' '})`;
+
+            // Return order summary for each item, including product details if available
+            return `${item.name} (${item.size || ' '}) x ${item.quantity} - ${productDetails}, `;
+          })
+          .join(', '),
+        total_amount: totalAmountWithShipping.value,
+      };
+
 
       // Prepare email template parameters2
       const templateParams2 = {
         to_name: `${firstName.value} ${lastName.value}`,
         to_email: import.meta.env.VITE_EMAIL,
-        order_summary: cartItems.value.map(item => `${item.name} (${item.size}) x ${item.quantity}`).join(', '),
-        total_amount: totalAmountWithShipping.value,
+        order_summary: cartItems.value
+          .map(item => {
+            // Check if item.products exists and is an array
+            const productDetails = Array.isArray(item.products)
+              ? item.products
+                  .map(product => `${product.name} (${product.selectedSize || ' '})`)
+                  .join(', ')
+              : `${item.name} (${item.size || ' '})`;
+
+            // Return order summary for each item, including product details if available
+            return `${item.name} (${item.size || ' '}) x ${item.quantity} - ${productDetails}, `;
+          })
+          .join(', '),
+          total_amount: totalAmountWithShipping.value,
       };
 
       // Send an email
