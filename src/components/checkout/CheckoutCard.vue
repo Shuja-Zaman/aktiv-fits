@@ -246,6 +246,8 @@ const submitOrder = async () => {
         }))
       };
 
+      console.log(cartItems.value);
+
       // console.log(orderData)
 
       // Send order data to Firebase
@@ -262,7 +264,7 @@ const submitOrder = async () => {
               ? item.products
                   .map(product => `${product.name} (${product.selectedSize || ' '})`)
                   .join(', ')
-              : `${item.name} (${item.size || ' '})`;
+              : ``;
 
             // Return order summary for each item, including product details if available
             return `${item.name} (${item.size || ' '}) x ${item.quantity} - ${productDetails}, `;
@@ -283,7 +285,7 @@ const submitOrder = async () => {
               ? item.products
                   .map(product => `${product.name} (${product.selectedSize || ' '})`)
                   .join(', ')
-              : `${item.name} (${item.size || ' '})`;
+              : ``;
 
             // Return order summary for each item, including product details if available
             return `${item.name} (${item.size || ' '}) x ${item.quantity} - ${productDetails}, `;
