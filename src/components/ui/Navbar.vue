@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar p-8 flex justify-between items-center border-b-[1px] border-zinc-300 relative">
+  <div class="navbar p-7 flex justify-between items-center border-b-[1px] border-zinc-300 relative">
     <!-- Display screen -->
     <div class="left-0 hidden md:flex items-center gap-14">
       <RouterLink to="/" class="">
@@ -7,17 +7,13 @@
       </RouterLink>
       <div class="items space-x-4 kanit-thin ">
         <RouterLink
-          class="item hover:border-b-2 py-[38px] px-5"
+          class="item hover:text-gray-400 py-[38px] px-5"
           v-for="item in navItems"
           :to="item.path"
           :key="item.index"
         >
           {{ item.name }}
         </RouterLink>
-      </div>
-      <div class="flex items-center justify-center gap-2">
-        <p class="text-orange-600 animate-pulse">Bundles available in shop</p>
-        <RouterLink to="/shop" class="underline"> Check Now!</RouterLink>
       </div>
       
     </div>
